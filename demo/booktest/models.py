@@ -8,6 +8,14 @@ class BookInfo(models.Model):
     def __str__(self):
         return self.bname
 
+    def name(self):
+        return self.bname
+    name.short_description = '书籍名称'
+
+    def pub_date(self):
+        return self.bpub_date
+    pub_date.short_description = '发行时间'
+
 class HeroInfo(models.Model):
     hname = models.CharField(max_length=20)
     hgender = models.BooleanField()
@@ -15,5 +23,17 @@ class HeroInfo(models.Model):
     hbook = models.ForeignKey('BookInfo',on_delete=models.CASCADE)
     def __str__(self):
         return self.hname
+
+    def skill(self):
+        return self.hname
+    skill.short_description = '人物名称'
+
+    def gender(self):
+        return self.hgender
+    gender.short_description = '人物性别'
+
+    def content(self):
+        return self.hcontent
+    content.short_description = '人物简介'
 
 
