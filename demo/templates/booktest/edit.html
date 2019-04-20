@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑页</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <div class="container">
+        <h2>书籍编辑</h2>
+        <form action="{% url 'booktest:update' bookid %}" method="post">
+            新书名：<input type="text" name="bname">
+            <br>
+            <input type="submit" value="提交">
+        </form>
+        <a href="{% url 'booktest:list' %}">返回列表页</a>
+    </div>
+</body>
+</html>
