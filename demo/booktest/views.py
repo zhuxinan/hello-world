@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect,reverse
 
 # Create your views here.
 from django.http import HttpResponse,HttpResponseRedirect
@@ -7,11 +7,23 @@ from django.template import loader,RequestContext
 
 def index(request):
     # return HttpResponse('首页')
-    template = loader.get_template('booktest/index.html')
-    cont = {"username":"admin"}
-    result = template.render(cont)
-    return HttpResponse(result)
+    # template = loader.get_template('booktest/index.html')
+    # cont = {"username":"admin"}
+    # result = template.render(cont)
+    # return HttpResponse(result)
+    # name = request.session.get('username')
+    return render(request,'booktest/index.html',{'username':request.session.get('username')})
 
+def login(request):
+    if request.method == "GET":
+        return render(request,'booktest/login.html')
+    elif request.method == "POST":
+        request.session['username'] = request.POST['username']
+        request.session.set_expiry(60)
+        return redirect(reverse('booktest:index'))
+
+def logout(request):
+    return redirect(reverse('booktest:index'))
 
 def list(request):
     # return HttpResponse('列表页')

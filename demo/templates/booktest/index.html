@@ -10,7 +10,7 @@
         {% if username %}
             <h1>{{ username }}</h1>
         {% else %}
-            <h1>错误</h1>
+            <h2>你好，请 <a href="{% url 'booktest:login' %}">登录</a></h2>
         {% endif %}
 
         <a href="{% url 'booktest:list' %}">进入列表页</a>
