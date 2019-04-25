@@ -4,7 +4,8 @@ from .models import BlogUser,BlogCategory,Tags,Post,Comment
 from django.template import loader,RequestContext
 import markdown
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
-
+from markdown.extensions.toc import *
+from django.utils.text import *
 # Create your views here.
 
 def index(request):
@@ -21,22 +22,28 @@ def index(request):
     except EmptyPage:
         blogs = pagintor.page(pagintor.num_pages)
     posts = Post.objects.all().order_by('-pub_date')[:3]
-    return render(request,'blogs/index.html',{'post':blogs,'dates':dates,'categorys':categorys,'tags':tags,'posts':posts})
+    return render(request,'blogs/index.html',{'post':blogs,'dates':dates,'categorys':categorys,
+                                              'tags':tags,'posts':posts})
 
 def single(request,id):
     post = Post.objects.get(pk=id)
     comment = post.comment_set.all()
     post.views += 1
     post.save()
-    post.content = markdown.markdown(post.content,extensions=[
+    md = markdown.Markdown(extensions=[
         'markdown.extensions.extra',
         'markdown.extensions.codehilite',
-        'markdown.extensions.toc',
+        # 'markdown.extensions.toc',
+        TocExtension(slugify=slugify),
     ])
+    post.content = md.convert(post.content)
+    post.toc = md.toc
     dates = Post.objects.dates('pub_date', 'month')
     tags = Tags.objects.all()
     categorys = BlogCategory.objects.all()
-    return render(request,'blogs/single.html',{'post':post,'comment':comment,'tags':tags,'categorys':categorys,'dates':dates})
+    posts = Post.objects.all().order_by('-pub_date')[:3]
+    return render(request,'blogs/single.html',{'post':post,'comment':comment,'tags':tags,'categorys':categorys,
+                                               'dates':dates,'posts':posts})
 
 def archives(request,year,month):
     post = Post.objects.filter(pub_date__year = year,
@@ -45,7 +52,8 @@ def archives(request,year,month):
     categorys = BlogCategory.objects.all()
     tags = Tags.objects.all()
     posts = Post.objects.all().order_by('-pub_date')[:3]
-    return render(request,'blogs/index.html',{'post':post,'dates':dates, 'categorys': categorys,'tags':tags,'posts':posts})
+    return render(request,'blogs/index.html',{'post':post,'dates':dates, 'categorys': categorys,'tags':tags,
+                                              'posts':posts})
 
 def category(request,id):
     cate = get_object_or_404(BlogCategory,pk=id)
@@ -54,7 +62,8 @@ def category(request,id):
     dates = post.dates('pub_date', 'month')
     tags = Tags.objects.all()
     posts = Post.objects.all().order_by('-pub_date')[:3]
-    return render(request, 'blogs/index.html', {'post': post, 'dates': dates, 'categorys': categorys,'tags':tags,'posts': posts})
+    return render(request, 'blogs/index.html', {'post': post, 'dates': dates, 'categorys': categorys,
+                                                'tags':tags,'posts': posts})
 
 def tags(request,id):
     post = Tags.objects.get(pk=id).post_set.all()
@@ -62,7 +71,8 @@ def tags(request,id):
     dates = Post.objects.dates('pub_date', 'month')
     tags = Tags.objects.all()
     posts = Post.objects.all().order_by('-pub_date')[:3]
-    return render(request, 'blogs/index.html', {'post': post, 'dates': dates, 'categorys': categorys,'tags':tags,'posts': posts})
+    return render(request, 'blogs/index.html', {'post': post, 'dates': dates, 'categorys': categorys,
+                                                'tags':tags,'posts': posts})
 
 def addcomment(request,id):
     user = request.POST['name']
