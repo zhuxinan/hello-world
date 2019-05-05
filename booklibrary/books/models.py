@@ -29,3 +29,17 @@ class BorrowHistory(models.Model):
     class Meta():
         verbose_name = '借阅历史'
         verbose_name_plural = '借阅历史'
+
+class HeatMap(models.Model):
+    name = models.CharField(max_length=20)
+    img = models.ImageField(upload_to='heatmap')
+    index = models.SmallIntegerField(unique=True)
+    def __str__(self):
+        return self.name
+
+from tinymce.models import HTMLField
+class Messige(models.Model):
+    title = models.CharField(max_length=50)
+    content = HTMLField()
+    def __str__(self):
+        return self.title

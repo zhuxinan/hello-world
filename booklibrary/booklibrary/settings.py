@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'books',
     'haystack',
+    'tinymce',
+    'booklibrary.simplemiddleware',
 ]
 
 MIDDLEWARE = [
@@ -124,6 +126,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
+MEDIA_ROOT = os.path.join(BASE_DIR,'static/media')
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'books.whoosh_cn_backend.WhooshEngine',
@@ -132,3 +136,25 @@ HAYSTACK_CONNECTIONS = {
 }
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 10
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+TINYMCE_DEFAULT_CONFIG = {'theme': 'advanced',
+                          'width': 600,
+                          'height': 400,
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True  #是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
+EMAIL_USE_SSL = False  #是否使用SSL加密，qq企业邮箱要求使用
+EMAIL_HOST = 'smtp.163.com'  #发送邮件的邮箱 的 SMTP服务器，这里用了163邮箱
+EMAIL_PORT = 25  #发件箱的SMTP服务器端口
+EMAIL_HOST_USER = '13812860027@163.com'  #发送邮件的邮箱地址
+EMAIL_HOST_PASSWORD = '18238955523.@.'
+DEFAULT_FROM_EMAIL = 'zxa <13812860027@163.com>'  #用来显示发送者
+
+CACHES = {
+    "default": {
+        "BACKEND": "redis_cache.cache.RedisCache",
+        "LOCATION": "localhost:6379",
+        'TIMEOUT': 60,
+    },
+}

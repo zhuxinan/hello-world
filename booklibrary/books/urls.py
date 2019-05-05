@@ -16,5 +16,10 @@ urlpatterns = [
     url(r'^reader_query/$',views.reader_query,name='reader_query'),
     url(r'^logout/$',views.logout,name='logout'),
     url(r'^search/$',SearchView(),name='search'),
-
+    url(r'^edit/$',views.edit,name='edit'),
+    url(r'^email/$',views.email,name='email'),
+    url(r'^active/(.*?)/$',views.active,name='active'),
+    url(r'^ajax/$',views.ajax,name='ajax'),
+    url(r'^load/$',views.load,name='load'),
+    url(r'^verifycode/$',views.verifycode,name='verifycode'),
 ]

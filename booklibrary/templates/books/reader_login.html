@@ -17,6 +17,8 @@
 	    <dd><input type=text name=username size=30 value=""> </dd>
 	    <dt>密码:	 </dt>
 	    <dd><input type=password name=password size=30> </dd>
+          <dt>验证码:	 </dt>
+	    <dd><img src="{% url 'books:verifycode' %}" alt="url不正确"> <input type="text" name="verifycode"> </dd>
 	  </dl>
 	  <div class=actions>
 	    <input type=submit value="登录">
