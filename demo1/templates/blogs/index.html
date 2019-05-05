@@ -1,0 +1,42 @@
+{% extends 'blogs/base.html' %}
+
+{% block left %}
+    {% for p in post %}
+    <article class="post post-1">
+        <header class="entry-header">
+            <h1 class="entry-title">
+                <a href="#">{{ p.title }}</a>
+            </h1>
+            <div class="entry-meta">
+                <span class="post-category"><a href="#">{{ p.category }}</a></span>
+                <span class="post-date"><a href="#"><time class="entry-date"
+                                                          datetime="2012-11-09T23:15:57+00:00">{{ p.pub_date }}</time></a></span>
+                <span class="post-author"><a href="#">{{ p.author }}</a></span>
+                <span class="comments-link"><a href="#">{{ p.comment_set.all.count }} 评论</a></span>
+                <span class="views-count"><a href="#">{{ p.views }} 阅读</a></span>
+            </div>
+        </header>
+        <div class="entry-content clearfix">
+            <p>{{ p.content|slice:'200' }}...</p>
+            <div class="read-more cl-effect-14">
+                <a href="#" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
+            </div>
+        </div>
+    </article>
+    {% empty %}
+        <h2>暂无文章</h2>
+    {% endfor %}
+
+    <div class="pagination">
+        <ul>
+            {% if post.has_previous %}
+                <a href="?page={{ post.previous_page_number }}">上一页</a>
+            {% endif %}
+                <li></li>
+            <span class="current">第 {{ post.number }} 页 / 共 {{ post.paginator.num_pages }} 页</span>
+            {% if post.has_next %}
+                <a href="?page={{ post.next_page_number }}">下一页</a>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}

@@ -4,6 +4,7 @@ from django.shortcuts import render,redirect,reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from .models import BookInfo,HeroInfo
 from django.template import loader,RequestContext
+from .forms import AddFrom
 
 def index(request):
     # return HttpResponse('首页')
@@ -15,12 +16,21 @@ def index(request):
     return render(request,'booktest/index.html',{'username':request.session.get('username')})
 
 def login(request):
+    # if request.method == "GET":
+    #     return render(request,'booktest/login.html')
+    # elif request.method == "POST":
+    #     request.session['username'] = request.POST['username']
+    #     request.session.set_expiry(60)
+    #     return redirect(reverse('booktest:index'))
     if request.method == "GET":
-        return render(request,'booktest/login.html')
+        form = AddFrom()
+        return render(request,'booktest/login.html',{'form':form})
     elif request.method == "POST":
-        request.session['username'] = request.POST['username']
-        request.session.set_expiry(60)
-        return redirect(reverse('booktest:index'))
+        form = AddFrom(request.POST)
+        if form.is_valid():
+            a = form.cleaned_data['a']
+            b = form.cleaned_data['b']
+            return HttpResponse(str(int(a))+str(int(b)))
 
 def logout(request):
     return redirect(reverse('booktest:index'))
@@ -100,3 +110,9 @@ def herodelete(request,heroid):
     hero = HeroInfo.objects.get(pk=heroid)
     hero.delete()
     return HttpResponseRedirect('/booktest/detail/'+str(hero.hbook.id)+'/')
+
+def csrf1(request):
+    return render(request,'booktest/csrf1.html')
+def csrf2(request):
+    uname = request.POST['uname']
+    return render(request,'booktest/csrf2.html',{'uname':uname})

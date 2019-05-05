@@ -19,4 +19,6 @@ urlpatterns = [
     url(r'^herodelete/(\d+)/$',views.herodelete,name='herodelete'),
     url(r'^login/$',views.login,name='login'),
     url(r'^logout/$',views.logout,name='logout'),
+    url(r'^csrf1/$',views.csrf1,name='csrf1'),
+    url(r'^csrf2/$',views.csrf2,name='csrf2'),
 ]
